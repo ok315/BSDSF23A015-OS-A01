@@ -105,3 +105,51 @@ Significance of attaching binaries:
 Users who don’t want to compile the source can directly download the ready-to-run executable (e.g., your bin/client).
 
 It improves accessibility and distributes prebuilt artifacts for different platforms.
+
+### 1. Compare the Makefile from Part 2 and Part 3
+
+-> Part 2 (Multifile Build) Makefile:
+
+Compiled all source files together directly into a single executable.
+
+Variables: SOURCES, OBJECTS, TARGET.
+
+Linking rule: all .o files linked directly into the executable.
+
+No library was created; main program and utility functions were all compiled together.
+
+-> Part 3 (Static Library Build) Makefile:
+
+Utility functions are compiled into a static library (libmyutils.a).
+
+Variables added: LIB_SRCS, LIB_OBJS, LIB.
+
+Linking rule: main object (main.o) is linked with the static library to produce the executable.
+
+Separate compilation allows for better modularity, reusability, and faster compilation when only library code changes.
+
+Key differences that enable the static library:
+
+Creation of LIB_OBJS for all non-main source files.
+
+$(LIB) target using ar rcs to bundle object files into libmyutils.a.
+
+The executable links main.o with the static library instead of all objects individually.
+
+New directory lib/ for storing the library.
+
+### 2. Purpose of the ar command and ranlib
+
+ar (archiver) is used to create, modify, and extract from archive files. In this context, it bundles multiple object files into a single static library (.a).
+
+ranlib generates an index of symbols in the archive, which is used by the linker to quickly locate functions in the library.
+
+Using ranlib immediately after ar ensures that the static library is ready for linking and avoids “undefined reference” errors during compilation.
+
+### 3. Running nm on client_static
+
+nm bin/client_static lists all symbols in the executable.
+
+Symbols like mystrlen, mystrcpy etc. are present, indicating that the static library's functions are fully included in the final executable.
+
+Implication: In static linking, all the required functions from the library are copied into the executable at compile/link time. The final binary contains everything it needs to run independently of the library files.
