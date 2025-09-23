@@ -13,7 +13,7 @@ This repository contains my Operating Systems assignment 1, where I create a cor
 
 ## How to build and run
 
-(You can fill this later after writing the Makefile and programs)
+(We can fill this later after writing the Makefile and programs)
 
 ---
 
