@@ -16,8 +16,6 @@
 - Analyze binaries using Linux tools.
 - Maintain a clean Git workflow with branching and tagging.
 
-# Assignment 1 - Core C Utilities Library
-
 ## Objective
 The objective of this assignment is to design a small **Core C Utilities Library** that provides string and file utility functions.  
 The project also focuses on practicing **Linux development tools** such as `make`, static & dynamic linking, Git workflow, and binary analysis.
@@ -67,6 +65,8 @@ The project also focuses on practicing **Linux development tools** such as `make
 
 ## Report Questions
 
+------Feature 02-------
+
 ### 1. Explain the linking rule in this part's Makefile:  
 `$(TARGET): $(OBJECTS)`  
 This rule means that the final executable (`$(TARGET)`) depends on all the object files (`$(OBJECTS)`).  
@@ -105,6 +105,8 @@ Significance of attaching binaries:
 Users who don’t want to compile the source can directly download the ready-to-run executable (e.g., your bin/client).
 
 It improves accessibility and distributes prebuilt artifacts for different platforms.
+
+-------Feature 03-------
 
 ### 1. Compare the Makefile from Part 2 and Part 3
 
@@ -153,3 +155,33 @@ nm bin/client_static lists all symbols in the executable.
 Symbols like mystrlen, mystrcpy etc. are present, indicating that the static library's functions are fully included in the final executable.
 
 Implication: In static linking, all the required functions from the library are copied into the executable at compile/link time. The final binary contains everything it needs to run independently of the library files.
+
+--------Feature 04---------
+
+### 1. What is Position-Independent Code (-fPIC) and why is it required for shared libraries?
+
+Position-Independent Code (PIC) is machine code that executes correctly regardless of its memory address.
+
+When creating shared libraries (.so), the library can be loaded at any address in memory by the operating system.
+
+Using the -fPIC flag ensures that all function calls and data accesses use relative addressing instead of absolute addresses, making the library suitable for dynamic linking.
+
+Without -fPIC, the shared library could only be loaded at a fixed address, which is unsafe and inefficient for multi-process use.
+
+### 2. Difference in file size between static and dynamic clients
+
+The static client (client_static) is larger because all library code is copied directly into the executable at compile time.
+
+The dynamic client (client_dynamic) is smaller because it only contains references to the shared library, which is loaded at runtime.
+
+This difference exists because dynamic linking allows multiple programs to share a single copy of the library in memory, reducing disk and memory usage.
+
+### 3. LD_LIBRARY_PATH and why it was necessary
+
+LD_LIBRARY_PATH is an environment variable that tells the OS loader where to look for shared libraries at runtime.
+
+Our client_dynamic executable initially failed because the OS could not find libmyutils.so in its default library paths (/lib, /usr/lib, etc.).
+
+By setting LD_LIBRARY_PATH to include the project’s lib/ directory, the loader could locate the shared library and successfully run the program.
+
+This demonstrates that the dynamic loader is responsible for resolving library paths at runtime, and the programmer or user may need to provide hints when using custom library locations.
